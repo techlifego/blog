@@ -87,6 +87,7 @@ image: /images/slug/cover.jpg  # 선택, 공유 이미지
 | 라이브리 댓글 | `COMMENTS.livereUid` (설치 코드의 `data-uid`) | 안 나옴 |
 | Giscus 댓글 | `COMMENTS.giscus.repoId/category/categoryId` (giscus.app에서 생성) | 안 나옴 |
 | 오픈채팅 버튼 | `COMMENTS.openChatUrl` | 안 나옴 |
+| 네이버 소유 확인 | `SITE.naverVerification` (HTML 태그의 content 값) | 태그 없음 |
 | 애드센스 | `ADSENSE.client` (`ca-pub-…`), 글 안 광고는 `inArticleSlot`도 | 광고 스크립트 없음 |
 
 - 댓글 스크립트는 댓글 자리가 화면에 가까워질 때만 불러온다 (첫 화면 속도 유지).
