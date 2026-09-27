@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { SITE, SECTIONS, SECTION_KEYS } from '../site.config';
+import { getPosts } from '../lib';
+
+const posts = (await getPosts()).slice(0, 20);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+  inLanguage: 'ko-KR',
+};
+---
+<Base jsonLd={jsonLd}>
+  <h1>기술로 가족 생활을 편하게</h1>
+  <p class="muted">{SITE.description}</p>
+  <div class="sections">
+    {SECTION_KEYS.map((k) => (
+      <a href={`/${k}/`}><strong>{SECTIONS[k].name}</strong><span>{SECTIONS[k].description}</span></a>
+    ))}
+  </div>
+  <h2>최근 글</h2>
+  <PostList posts={posts} showSection />
+</Base>

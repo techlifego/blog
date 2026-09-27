@@ -1,0 +1,47 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Comments from '../../components/Comments.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { SITE, SECTIONS } from '../../site.config';
+import { getPosts, postUrl, formatDate, type Post } from '../../lib';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { section: post.data.section, slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const { Content } = await render(post);
+const d = post.data;
+const url = new URL(postUrl(post), SITE.url).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.pubDate.toISOString(),
+  dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+  inLanguage: 'ko-KR',
+  mainEntityOfPage: url,
+  url,
+  author: { '@type': 'Person', name: SITE.author, url: SITE.url },
+  publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  articleSection: SECTIONS[d.section].name,
+  ...(d.image ? { image: new URL(d.image, SITE.url).href } : {}),
+  ...(d.tags.length ? { keywords: d.tags.join(', ') } : {}),
+};
+---
+<Base title={d.title} description={d.description} type="article" image={d.image} jsonLd={jsonLd} noindex={d.draft}>
+  <article>
+    <p class="muted"><a href={`/${d.section}/`}>{SECTIONS[d.section].name}</a></p>
+    <h1>{d.title} {d.draft && <span class="draft-badge">초안</span>}</h1>
+    <p class="muted">
+      <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time>
+      {d.updatedDate && <> · 고침 {formatDate(d.updatedDate)}</>}
+    </p>
+    <div class="content"><Content /></div>
+    <AdSlot />
+  </article>
+  <Comments />
+</Base>

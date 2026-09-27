@@ -1,0 +1,71 @@
+---
+// 댓글 3종. 설정값이 비어 있는 것은 표시하지 않는다.
+// 무거운 외부 스크립트는 댓글 자리가 화면에 가까워졌을 때만 불러온다.
+import { COMMENTS } from '../site.config';
+
+const { livereUid, giscus, openChatUrl } = COMMENTS;
+const giscusOn = Boolean(giscus.repo && giscus.repoId && giscus.category && giscus.categoryId);
+const any = Boolean(livereUid || giscusOn || openChatUrl);
+---
+{any && (
+  <section class="comments" aria-label="댓글">
+    {openChatUrl && (
+      <div>
+        <p>더 이야기하고 싶으면 오픈채팅으로 오세요.</p>
+        <a class="openchat" href={openChatUrl} target="_blank" rel="noopener nofollow">카카오 오픈채팅 참여</a>
+      </div>
+    )}
+    {livereUid && (
+      <div>
+        <h2>댓글</h2>
+        <div id="lv-container" data-id="city" data-uid={livereUid} data-lazy="livere"></div>
+      </div>
+    )}
+    {giscusOn && (
+      <div>
+        <h2>GitHub로 댓글 달기</h2>
+        <div
+          class="giscus-slot"
+          data-lazy="giscus"
+          data-repo={giscus.repo}
+          data-repo-id={giscus.repoId}
+          data-category={giscus.category}
+          data-category-id={giscus.categoryId}
+        ></div>
+      </div>
+    )}
+  </section>
+)}
+{any && (
+  <script is:inline>
+    (function () {
+      function load(el) {
+        var kind = el.getAttribute('data-lazy');
+        var s = document.createElement('script');
+        s.async = true;
+        if (kind === 'livere') {
+          if (typeof window.LivereTower === 'function') return;
+          s.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        } else if (kind === 'giscus') {
+          s.src = 'https://giscus.app/client.js';
+          s.crossOrigin = 'anonymous';
+          var attrs = {
+            'data-repo': el.dataset.repo, 'data-repo-id': el.dataset.repoId,
+            'data-category': el.dataset.category, 'data-category-id': el.dataset.categoryId,
+            'data-mapping': 'pathname', 'data-strict': '1', 'data-reactions-enabled': '1',
+            'data-emit-metadata': '0', 'data-input-position': 'top', 'data-theme': 'preferred_color_scheme',
+            'data-lang': 'ko', 'data-loading': 'lazy'
+          };
+          for (var k in attrs) s.setAttribute(k, attrs[k]);
+        } else return;
+        el.appendChild(s);
+      }
+      var els = document.querySelectorAll('[data-lazy]');
+      if (!('IntersectionObserver' in window)) { els.forEach(load); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); load(e.target); } });
+      }, { rootMargin: '600px' });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+)}

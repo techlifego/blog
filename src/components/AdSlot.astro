@@ -1,0 +1,11 @@
+---
+// 애드센스 승인 전에는 아무것도 그리지 않는다. site.config.ts 의 ADSENSE 값을 넣으면 켜진다.
+import { ADSENSE } from '../site.config';
+const on = Boolean(ADSENSE.client && ADSENSE.inArticleSlot);
+---
+{on && (
+  <div class="ad-slot">
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client={ADSENSE.client} data-ad-slot={ADSENSE.inArticleSlot}></ins>
+    <script is:inline>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+)}

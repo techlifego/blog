@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { SECTIONS, SECTION_KEYS, type SectionKey } from '../../site.config';
+import { getPosts } from '../../lib';
+
+export function getStaticPaths() {
+  return SECTION_KEYS.map((section) => ({ params: { section } }));
+}
+
+const section = Astro.params.section as SectionKey;
+const info = SECTIONS[section];
+const posts = await getPosts(section);
+---
+<Base title={info.name} description={info.description}>
+  <link slot="head" rel="alternate" type="application/rss+xml" href={`/${section}/rss.xml`} />
+  <h1>{info.name}</h1>
+  <p class="muted">{info.description} · <a href={`/${section}/rss.xml`}>RSS</a></p>
+  <PostList posts={posts} />
+</Base>
