@@ -32,6 +32,7 @@ techlifego(이하 "이 블로그")는 방문자의 개인정보를 소중히 다
 
 - Google을 포함한 제3자 광고 사업자는 쿠키를 사용해 방문자가 이 블로그와 다른 웹사이트를 방문한 기록을 바탕으로 광고를 보여 줄 수 있습니다.
 - Google의 광고 쿠키 사용에 대해서는 [Google 광고 정책](https://policies.google.com/technologies/ads?hl=ko)에서 확인할 수 있습니다.
+- Google이 이 블로그 같은 파트너 사이트에서 정보를 어떻게 쓰는지는 [파트너 사이트에서 Google이 데이터를 사용하는 방법](https://policies.google.com/technologies/partner-sites?hl=ko)에서 볼 수 있습니다.
 - 맞춤 광고를 원하지 않으면 [Google 광고 설정](https://adssettings.google.com/)에서 끌 수 있습니다.
 - 브라우저 설정에서 쿠키를 거부할 수 있습니다. 이 경우 일부 기능(댓글 로그인 등)이 제한될 수 있습니다.
 
