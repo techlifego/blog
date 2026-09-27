@@ -10,7 +10,7 @@ export const SITE = {
   locale: 'ko_KR',
   author: 'techlifego',
   // 문의 이메일. 메일 받을 곳(예: Cloudflare 이메일 라우팅)을 연결한 뒤에 넣는다.
-  contactEmail: '',
+  contactEmail: 'blog@techlifego.com',
 };
 
 export const SECTIONS = {
