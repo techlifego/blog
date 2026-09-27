@@ -12,7 +12,7 @@ export const SITE = {
   // 문의 이메일. 메일 받을 곳(예: Cloudflare 이메일 라우팅)을 연결한 뒤에 넣는다.
   contactEmail: 'blog@techlifego.com',
   // 네이버 서치어드바이저 소유 확인 (HTML 태그의 content 값). 비어 있으면 태그를 넣지 않는다.
-  naverVerification: '',
+  naverVerification: 'e0d84b48b42f0ff7efce8b0a363e5b0808d7ae2e',
 };
 
 export const SECTIONS = {
