@@ -34,6 +34,7 @@ const current = Astro.url.pathname.split('/')[1];
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    {SITE.naverVerification && <meta name="naver-site-verification" content={SITE.naverVerification} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
