@@ -28,6 +28,10 @@ export const SECTIONS = {
     name: '아빠 에세이',
     description: '아이를 키우며 배우고 느낀 것을 씁니다.',
   },
+  books: {
+    name: '책·트렌드 읽기',
+    description: '책과 트렌드 보고서를 읽고 우리 생활에 대어 본 기록입니다.',
+  },
 } as const;
 
 export type SectionKey = keyof typeof SECTIONS;
