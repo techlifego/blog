@@ -1,24 +1,14 @@
 ---
-import { SECTIONS } from '../site.config';
-import { postUrl, formatDate, type Post } from '../lib';
+import PostCard from './PostCard.astro';
+import type { Post } from '../lib';
 
 interface Props { posts: Post[]; showSection?: boolean }
-const { posts, showSection = false } = Astro.props;
+const { posts } = Astro.props;
 ---
 {posts.length === 0 ? (
   <p class="muted">첫 글을 준비하고 있습니다.</p>
 ) : (
-  <ul class="post-list">
-    {posts.map((p) => (
-      <li>
-        <a href={postUrl(p)}>{p.data.title}</a>
-        {p.data.draft && <span class="draft-badge">초안</span>}
-        <p>{p.data.description}</p>
-        <p class="muted">
-          <time datetime={p.data.pubDate.toISOString()}>{formatDate(p.data.pubDate)}</time>
-          {showSection && <> · {SECTIONS[p.data.section].name}</>}
-        </p>
-      </li>
-    ))}
-  </ul>
+  <div class="card-grid">
+    {posts.map((p) => <PostCard post={p} />)}
+  </div>
 )}

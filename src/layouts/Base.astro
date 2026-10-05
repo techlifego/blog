@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { SITE, SECTIONS, SECTION_KEYS, ADSENSE } from '../site.config';
+import Logo from '../components/Logo.astro';
+import SectionIcon from '../components/SectionIcon.astro';
 
 interface Props {
   title?: string;
@@ -46,11 +48,11 @@ const current = Astro.url.pathname.split('/')[1];
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap">
-        <a class="logo" href="/">{SITE.name}</a>
+      <div class="wrap header-row">
+        <a class="logo" href="/"><Logo /><span>techlife<b>go</b></span></a>
         <nav aria-label="구역">
           {SECTION_KEYS.map((k) => (
-            <a href={`/${k}/`} aria-current={current === k ? 'page' : undefined}>{SECTIONS[k].name}</a>
+            <a href={`/${k}/`} aria-current={current === k ? 'page' : undefined}><SectionIcon section={k} size={18} />{SECTIONS[k].name}</a>
           ))}
         </nav>
       </div>
@@ -60,7 +62,7 @@ const current = Astro.url.pathname.split('/')[1];
     </main>
     <footer class="site-footer">
       <div class="wrap">
-        <p>{SITE.name} · 기술로 가족 생활을 편하게</p>
+        <p class="foot-logo"><Logo size={22} /><b>techlifego</b> · 기술로 가족 생활을 편하게</p>
         <p>
           <a href="/about/">소개</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/contact/">문의</a> · <a href="/rss.xml">RSS</a>
         </p>

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PostList from '../components/PostList.astro';
+import SectionIcon from '../components/SectionIcon.astro';
 import { SITE, SECTIONS, SECTION_KEYS } from '../site.config';
 import { getPosts } from '../lib';
 
@@ -15,13 +16,18 @@ const jsonLd = {
 };
 ---
 <Base jsonLd={jsonLd}>
-  <h1>기술로 가족 생활을 편하게</h1>
-  <p class="muted">{SITE.description}</p>
+  <section class="hero">
+    <h1>기술로 가족 생활을 편하게</h1>
+    <p>아이와 나들이·놀이, 생활 속 AI 활용, 책과 트렌드 읽기까지. 직접 해 보고 확인한 것만 씁니다.</p>
+  </section>
   <div class="sections">
     {SECTION_KEYS.map((k) => (
-      <a href={`/${k}/`}><strong>{SECTIONS[k].name}</strong><span>{SECTIONS[k].description}</span></a>
+      <a class={`sec-tile sec-${k}`} href={`/${k}/`}>
+        <span class="sec-badge"><SectionIcon section={k} size={26} /></span>
+        <span><strong>{SECTIONS[k].name}</strong><span>{SECTIONS[k].description}</span></span>
+      </a>
     ))}
   </div>
-  <h2>최근 글</h2>
+  <h2 class="list-title">최근 글</h2>
   <PostList posts={posts} showSection />
 </Base>

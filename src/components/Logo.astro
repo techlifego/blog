@@ -1,0 +1,10 @@
+---
+// techlifego 로고: 지붕(가족·생활) 아래 앞으로 가는 화살표(go). public/favicon.svg와 같은 그림.
+interface Props { size?: number }
+const { size = 30 } = Astro.props;
+---
+<svg class="logo-mark" width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+  <rect width="32" height="32" rx="8" fill="var(--accent)" />
+  <path d="M7 15.5 16 8l9 7.5" fill="none" stroke="var(--accent-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M13 15.5v8.5l8-4.25Z" fill="var(--accent-ink)" />
+</svg>

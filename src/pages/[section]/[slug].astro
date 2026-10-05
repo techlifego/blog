@@ -3,6 +3,9 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Comments from '../../components/Comments.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import PostCard from '../../components/PostCard.astro';
+import SectionIcon from '../../components/SectionIcon.astro';
+import { SECTION_KEYS } from '../../site.config';
 import { SITE, SECTIONS } from '../../site.config';
 import { getPosts, postUrl, formatDate, type Post } from '../../lib';
 
@@ -12,6 +15,13 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props as { post: Post };
+const all = await getPosts();
+// 사이드바: 같은 연재(순서대로) · 최근 글(이 글 제외 5편)
+const series = post.data.series ? all.filter((p) => p.data.series === post.data.series).sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0)) : [];
+const idx = series.findIndex((p) => p.id === post.id);
+const prev = idx > 0 ? series[idx - 1] : undefined;
+const next = idx >= 0 && idx < series.length - 1 ? series[idx + 1] : undefined;
+const recent = all.filter((p) => p.id !== post.id && !series.includes(p)).slice(0, 5);
 const { Content } = await render(post);
 const d = post.data;
 const url = new URL(postUrl(post), SITE.url).href;
@@ -33,15 +43,45 @@ const jsonLd = {
 };
 ---
 <Base title={d.title} description={d.description} type="article" image={d.image} jsonLd={jsonLd} noindex={d.draft || d.pubDate.valueOf() > Date.now()}>
-  <article>
-    <p class="muted"><a href={`/${d.section}/`}>{SECTIONS[d.section].name}</a></p>
-    <h1>{d.title} {d.draft && <span class="draft-badge">초안</span>}{!d.draft && d.pubDate.valueOf() > Date.now() && <span class="draft-badge">예약</span>}</h1>
-    <p class="muted">
-      <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time>
-      {d.updatedDate && <> · 고침 {formatDate(d.updatedDate)}</>}
-    </p>
-    <div class="content"><Content /></div>
-    <AdSlot />
-  </article>
-  <Comments />
+  <div class="post-layout">
+    <article class="post">
+      <p class="crumb"><a href={`/${d.section}/`} class={`chip sec-${d.section}`}><SectionIcon section={d.section} size={14} />{SECTIONS[d.section].name}</a></p>
+      <h1>{d.title} {d.draft && <span class="draft-badge">초안</span>}{!d.draft && d.pubDate.valueOf() > Date.now() && <span class="draft-badge">예약</span>}</h1>
+      <p class="muted">
+        <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time>
+        {d.updatedDate && <> · 고침 {formatDate(d.updatedDate)}</>}
+      </p>
+      <div class="content"><Content /></div>
+      {(prev || next) && (
+        <nav class="series-nav" aria-label="연재 이동">
+          {prev ? <a href={postUrl(prev)}><span>← 이전 편</span>{prev.data.title}</a> : <span />}
+          {next ? <a class="next" href={postUrl(next)}><span>다음 편 →</span>{next.data.title}</a> : <span />}
+        </nav>
+      )}
+      <AdSlot />
+      <Comments />
+    </article>
+    <aside class="side" aria-label="다른 글">
+      {series.length > 1 && (
+        <section class="side-box">
+          <h2>연재 · {post.data.series}</h2>
+          <ol class="series-list">
+            {series.map((p) => <li class:list={{ now: p.id === post.id }}>{p.id === post.id ? <span>{p.data.title}</span> : <a href={postUrl(p)}>{p.data.title}</a>}</li>)}
+          </ol>
+        </section>
+      )}
+      {recent.length > 0 && (
+        <section class="side-box">
+          <h2>최근 글</h2>
+          <div class="mini-list">{recent.map((p) => <PostCard post={p} mini />)}</div>
+        </section>
+      )}
+      <section class="side-box">
+        <h2>구역</h2>
+        <ul class="side-secs">
+          {SECTION_KEYS.map((k) => <li><a class={`sec-${k}`} href={`/${k}/`}><SectionIcon section={k} size={18} />{SECTIONS[k].name}</a></li>)}
+        </ul>
+      </section>
+    </aside>
+  </div>
 </Base>

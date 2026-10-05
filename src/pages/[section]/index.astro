@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
+import SectionIcon from '../../components/SectionIcon.astro';
 import { SECTIONS, SECTION_KEYS, type SectionKey } from '../../site.config';
 import { getPosts } from '../../lib';
 
@@ -14,7 +15,9 @@ const posts = await getPosts(section);
 ---
 <Base title={info.name} description={info.description}>
   <link slot="head" rel="alternate" type="application/rss+xml" href={`/${section}/rss.xml`} />
-  <h1>{info.name}</h1>
-  <p class="muted">{info.description} · <a href={`/${section}/rss.xml`}>RSS</a></p>
+  <section class={`sec-head sec-${section}`}>
+    <span class="sec-badge"><SectionIcon section={section} size={30} /></span>
+    <div><h1>{info.name}</h1><p class="muted">{info.description} · <a href={`/${section}/rss.xml`}>RSS</a></p></div>
+  </section>
   <PostList posts={posts} />
 </Base>
