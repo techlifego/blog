@@ -120,6 +120,6 @@ image: /images/slug/cover.jpg  # 선택, 공유 이미지
 
 - 글 머리말 `pubDate`에 **시각까지** 적으면 예약 글이 된다: `pubDate: 2026-10-06T07:00:00+09:00` (한국 시간 아침 7시).
 - 배포 빌드는 `pubDate`가 빌드 시각보다 뒤인 글을 빼고 만든다 (`src/lib.ts`의 `isPublished`). 미리보기(`SHOW_DRAFTS=1`)에서는 "예약" 표시와 함께 보인다.
-- `.github/workflows/scheduled-publish.yml`이 매시간 `scripts/due-posts.mjs`를 돌린다. 발행 시각이 막 지난 글이 있을 때만 Cloudflare 배포 훅을 불러 다시 빌드한다(빌드 횟수 절약).
+- `.github/workflows/scheduled-publish.yml`이 매시간 `scripts/due-posts.mjs`를 돌린다. 발행 시각이 지났는데 실제 사이트에 없는 글이 있을 때만 Cloudflare 배포 훅을 불러 다시 빌드한다(빌드 횟수 절약). GitHub 예약 실행은 몇 시간씩 밀리므로 시간 창으로 판단하지 않는다(10-09 고침).
 - 필요한 설정(운영자 1회): Cloudflare → Workers & Pages → 이 프로젝트 → 설정 → 빌드 → **배포 후크(Deploy hooks)** 만들기(브랜치 main) → 나온 주소를 GitHub 저장소 Settings → Secrets and variables → Actions → **New repository secret** 이름 `CF_DEPLOY_HOOK`에 넣는다. 주소는 채팅·파일에 적지 않는다.
 - 예약 현황 보기: `node scripts/due-posts.mjs`

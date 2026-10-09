@@ -1,4 +1,4 @@
-# 예약 발행: 매시간 확인해서, 발행 시각이 막 지난 글이 있을 때만 Cloudflare Pages를 다시 배포한다.
+# 예약 발행: 매시간 확인해서, 발행 시각이 지났는데 사이트에 없는 글이 있을 때만 Cloudflare Pages를 다시 배포한다.
 # 필요한 것: 저장소 Settings → Secrets and variables → Actions 에 CF_DEPLOY_HOOK (Cloudflare Pages 배포 훅 주소)
 name: scheduled-publish
 
@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 22
       - id: check
-        run: node scripts/due-posts.mjs 75
+        run: node scripts/due-posts.mjs
       - name: Cloudflare 다시 배포
         if: steps.check.outputs.due == 'true' || github.event_name == 'workflow_dispatch'
         env:
